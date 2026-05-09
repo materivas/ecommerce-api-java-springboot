@@ -19,8 +19,8 @@ public interface ICarritoRepository extends JpaRepository<Carrito, Long> {
 
     Carrito findEntityByIdCarrito(Long id);
 
-    @Query("SELECT new com.materivas.ecommerce_api.dto.CarritoDTO(c.idCarrito, c.usuario.id) " +
-            "FROM Carrito c WHERE c.usuario.id = :idUsuario")
+    @Query("SELECT new com.materivas.ecommerce_api.dto.CarritoDTO(c.idCarrito, c.usuario.idUsuario) " +
+            "FROM Carrito c WHERE c.usuario.idUsuario = :idUsuario")
     List<CarritoDTO> findByUsuarioId(@Param("idUsuario") Long idUsuario);
 
     // Verificar si existe carrito para un usuario

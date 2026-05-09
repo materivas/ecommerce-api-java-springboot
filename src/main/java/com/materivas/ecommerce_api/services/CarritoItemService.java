@@ -5,7 +5,7 @@ import java.util.Optional;
 
 import com.materivas.ecommerce_api.entities.CarritoItem;
 
-public interface ICarritoItemService {
+public interface CarritoItemService {
 
     List<CarritoItem> findByCarrito_IdCarrito(Long idCarrito);
 

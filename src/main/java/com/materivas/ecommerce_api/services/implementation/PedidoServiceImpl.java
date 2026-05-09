@@ -10,7 +10,7 @@ import com.materivas.ecommerce_api.entities.Producto;
 import com.materivas.ecommerce_api.repositories.IPedidoRepository;
 import com.materivas.ecommerce_api.repositories.IProductoRepository;
 import com.materivas.ecommerce_api.repositories.IUsuarioRepository;
-import com.materivas.ecommerce_api.services.IPedidoService;
+import com.materivas.ecommerce_api.services.PedidoService;
 
 import java.math.BigDecimal;
 import java.time.LocalDateTime;
@@ -18,14 +18,14 @@ import java.util.List;
 import java.util.Optional;
 
 @Service
-public class PedidoService implements IPedidoService {
+public class PedidoServiceImpl implements PedidoService {
 
     @Autowired
     private IPedidoRepository pedidoRepository;
-    
+
     @Autowired
     private IUsuarioRepository usuarioRepository;
-    
+
     @Autowired
     private IProductoRepository productoRepository;
 
@@ -36,19 +36,18 @@ public class PedidoService implements IPedidoService {
         if (!usuarioRepository.existsById(pedido.getUsuario().getIdUsuario())) {
             throw new RuntimeException("Usuario no encontrado");
         }
-        
+
         // Establecer fecha actual si no viene definida
         if (pedido.getFecha() == null) {
             pedido.setFecha(LocalDateTime.now());
         }
-        
+
         // Calcular total inicial (puede actualizarse al agregar items)
         pedido.setTotal(0.0);
-        
+
         return pedidoRepository.save(pedido);
     }
 
-    @Override
     @Transactional(readOnly = true)
     public Optional<Pedido> buscarPorId(Long id) {
         return pedidoRepository.findById(id);
@@ -57,7 +56,7 @@ public class PedidoService implements IPedidoService {
     @Override
     @Transactional(readOnly = true)
     public List<Pedido> buscarPorUsuario(Long usuarioId) {
-        return pedidoRepository.findByUsuarioId(usuarioId);
+        return pedidoRepository.findByUsuario_IdUsuario(usuarioId);
     }
 
     @Override
@@ -86,20 +85,20 @@ public class PedidoService implements IPedidoService {
         }
 
         PedidoItem item = new PedidoItem();
+        item.setPedido(pedido);
         item.setProducto(producto);
         item.setCantidad(cantidad);
-        item.setPrecioUnitario(producto.getPrecio()); 
-        
+        item.setPrecioUnitario(producto.getPrecio());
 
         // Calcular subtotal (BigDecimal)
         BigDecimal subtotal = producto.getPrecio().multiply(BigDecimal.valueOf(cantidad));
-        
+
         // Actualizar total del pedido (convertir si es necesario)
-        pedido.setTotal(pedido.getTotal() + subtotal.doubleValue()); 
+        pedido.setTotal(pedido.getTotal() + subtotal.doubleValue());
 
         pedido.getItems().add(item);
         producto.setStock(producto.getStock() - cantidad);
-        
+
         productoRepository.save(producto);
         return pedidoRepository.save(pedido);
     }
@@ -109,14 +108,14 @@ public class PedidoService implements IPedidoService {
     public void cancelarPedido(Long pedidoId) {
         Pedido pedido = pedidoRepository.findById(pedidoId)
                 .orElseThrow(() -> new RuntimeException("Pedido no encontrado"));
-        
+
         // Devolver stock de cada item
         pedido.getItems().forEach(item -> {
             Producto producto = item.getProducto();
             producto.setStock(producto.getStock() + item.getCantidad());
             productoRepository.save(producto);
         });
-        
+
         // Marcar como cancelado (opcional: agregar campo 'estado' a la entidad)
         pedidoRepository.delete(pedido); // O usar borrado lógico
     }

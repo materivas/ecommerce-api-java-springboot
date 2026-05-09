@@ -13,15 +13,15 @@ import java.util.List;
 @Repository("pedidoItemRepository")
 public interface IPedidoItemRepository extends JpaRepository<PedidoItem, Long> {
 
-    List<PedidoItem> findByPedidoId(Long pedidoId);
+    List<PedidoItem> findByPedido_IdPedido(Long pedidoId);
 
-    List<PedidoItem> findByProductoId(Long productoId);
+    List<PedidoItem> findByProducto_IdProducto(Long productoId);
 
     List<PedidoItem> findByCantidadGreaterThan(int cantidad);
 
     List<PedidoItem> findByPrecioUnitarioGreaterThan(BigDecimal precioMinimo);
 
-    @Query("SELECT SUM(pi.precioUnitario * pi.cantidad) FROM PedidoItem pi WHERE pi.producto.id = :productoId")
+    @Query("SELECT COALESCE(SUM(pi.precioUnitario * pi.cantidad), 0) FROM PedidoItem pi WHERE pi.producto.idProducto = :productoId")
     BigDecimal calcularTotalVentasPorProducto(@Param("productoId") Long productoId);
 
     @Query("""

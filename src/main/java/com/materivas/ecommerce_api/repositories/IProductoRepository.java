@@ -54,7 +54,7 @@ public interface IProductoRepository extends JpaRepository<Producto, Long> {
     List<Producto> findByCategorias(@Param("categorias") List<String> categorias);
 
     // ---- Métodos nativos (para operaciones complejas) ----
-    @Query(value = "SELECT * FROM productos WHERE LOWER(nombre) LIKE LOWER(CONCAT('%', :keyword, '%'))", nativeQuery = true)
+    @Query("SELECT p FROM Producto p WHERE LOWER(p.nombre) LIKE LOWER(CONCAT('%', :keyword, '%'))")
     List<Producto> buscarPorPalabraClave(@Param("keyword") String keyword);
 
 }

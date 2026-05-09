@@ -10,10 +10,10 @@ import org.springframework.stereotype.Service;
 import com.materivas.ecommerce_api.dto.CarritoDTO;
 import com.materivas.ecommerce_api.entities.Carrito;
 import com.materivas.ecommerce_api.repositories.ICarritoRepository;
-import com.materivas.ecommerce_api.services.ICarritoService;
+import com.materivas.ecommerce_api.services.CarritoService;
 
 @Service
-public class CarritoService implements ICarritoService {
+public class CarritoServiceImpl implements CarritoService {
 
     @Autowired
     private ICarritoRepository carritoRepository;

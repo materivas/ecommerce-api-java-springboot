@@ -6,7 +6,7 @@ import java.util.List;
 import com.materivas.ecommerce_api.dto.PedidoItemDTO;
 import com.materivas.ecommerce_api.dto.TopProductoVentasDTO;
 
-public interface IPedidoItemService {
+public interface PedidoItemService {
 
     PedidoItemDTO crearItem(PedidoItemDTO item);
 

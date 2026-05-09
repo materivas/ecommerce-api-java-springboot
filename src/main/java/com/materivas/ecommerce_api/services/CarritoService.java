@@ -6,7 +6,7 @@ import java.util.Optional;
 import com.materivas.ecommerce_api.dto.CarritoDTO;
 import com.materivas.ecommerce_api.entities.Carrito;
 
-public interface ICarritoService {
+public interface CarritoService {
 
     Optional<Carrito> findByIdCarrito(Long id);
 

@@ -19,4 +19,9 @@ public class CarritoDTO {
     private Set<CarritoItemDTO> items = new HashSet<>();
 
     private BigDecimal total;
+
+    public CarritoDTO(Long idCarrito, Long idUsuario) {
+        this.idCarrito = idCarrito;
+        this.idUsuario = idUsuario;
+    }
 }

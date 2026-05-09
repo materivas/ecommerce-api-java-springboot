@@ -12,6 +12,8 @@ public class PedidoItemDTO {
 
     private Long idPedidoItem;
 
+    private Long idPedido;
+
     private Long idProducto;
 
     private String nombreProducto;
